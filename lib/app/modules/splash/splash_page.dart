@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_timer/app/extensions/colors_ext.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -6,18 +7,14 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
+        body: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [
+          context.primaryColorLight,
+          context.primaryColor,
+        ]),
       ),
-      body: Column(
-        children: [
-          Container(),
-          TextFormField(
-            decoration: const InputDecoration(label: Text("xxxx")),
-          ),
-          ElevatedButton(onPressed: () {}, child: const Text("xxxx"))
-        ],
-      ),
-    );
+      child: Center(child: Image.asset('assets/images/logo.png')),
+    ));
   }
 }
