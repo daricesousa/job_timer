@@ -1,8 +1,13 @@
 enum ProjectStatusEnum {
-  inProgress(label: "Em andamento"),
-  finished(label: "Finalizado");
+  inProgress,
+  finished;
 
-  final String label;
-
-  const ProjectStatusEnum({required this.label});
+  String get label {
+    switch (this) {
+      case ProjectStatusEnum.inProgress:
+        return "Em andamento";
+      case ProjectStatusEnum.finished:
+        return "Finalizado";
+    }
+  }
 }
