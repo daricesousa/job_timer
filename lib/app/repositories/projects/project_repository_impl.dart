@@ -4,6 +4,7 @@ import 'package:isar/isar.dart';
 import 'package:job_timer/app/core/exceptions/failure.dart';
 import 'package:job_timer/app/core/ui/database/database.dart';
 import 'package:job_timer/app/entities/project.dart';
+import 'package:job_timer/app/entities/projects_status_enum.dart';
 
 import './project_repository.dart';
 
@@ -25,5 +26,13 @@ class ProjectRepositoryImpl implements ProjectRepository {
       log(message, error: e, stackTrace: s);
       throw Failure(message: message);
     }
+  }
+
+  @override
+  Future<List<Project>> findByStatus(ProjectStatusEnum status) async {
+    final connection = await _database.openConnection();
+    final projects =
+        await connection.projects.filter().statusEqualTo(status).findAll();
+    return projects;
   }
 }
