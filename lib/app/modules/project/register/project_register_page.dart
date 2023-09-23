@@ -1,6 +1,7 @@
 import 'package:asuka/asuka.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:job_timer/app/core/ui/button_with_loader.dart';
 import 'package:job_timer/app/modules/project/register/controller/project_register_controller.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -78,20 +79,15 @@ class _ProjectRegisterPageState extends State<ProjectRegisterPage> {
                     ]),
                   ),
                   const SizedBox(height: 10),
-                  BlocSelector<ProjectRegisterController, ProjectRegisterStatus,
-                          bool>(
-                      bloc: widget.controller,
-                      selector: (state) =>
-                          state == ProjectRegisterStatus.loading,
-                      builder: (context, showLoading) {
-                        return Visibility(
-                            visible: showLoading,
-                            child: const CircularProgressIndicator.adaptive());
-                      }),
                   SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 49,
-                      child: ElevatedButton(
+                      child: ButtonWithLoader<ProjectRegisterController,
+                              ProjectRegisterStatus>(
+                          bloc: widget.controller,
+                          selector: (state) =>
+                              state == ProjectRegisterStatus.loading,
+                          label: "Salvar",
                           onPressed: () async {
                             final formValid =
                                 _formKey.currentState?.validate() ?? false;
@@ -101,8 +97,7 @@ class _ProjectRegisterPageState extends State<ProjectRegisterPage> {
                               await widget.controller
                                   .register(name: name, estimate: estimate);
                             }
-                          },
-                          child: const Text("Salvar")))
+                          }))
                 ],
               ),
             )),

@@ -24,6 +24,7 @@ class HeaderProjectsMenu extends SliverPersistentHeaderDelegate {
             SizedBox(
               width: constraints.maxWidth * 0.4,
               child: DropdownButtonFormField<ProjectStatusEnum>(
+                value: ProjectStatusEnum.inProgress,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(10),
                   isCollapsed: true,
@@ -37,7 +38,11 @@ class HeaderProjectsMenu extends SliverPersistentHeaderDelegate {
                           child: Text(e.label),
                         ))
                     .toList(),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  if (value != null) {
+                    controller.loadProjects(newStatus: value);
+                  }
+                },
               ),
             ),
             SizedBox(
