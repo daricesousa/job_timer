@@ -1,6 +1,7 @@
 import 'package:asuka/asuka.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:job_timer/app/entities/projects_status_enum.dart';
 import 'package:job_timer/app/modules/project/detail/controller/project_detail_controller.dart';
 import 'package:job_timer/app/modules/project/detail/widgets/project_detail_appbar.dart';
 import 'package:job_timer/app/modules/project/detail/widgets/project_pie_chart.dart';
@@ -18,7 +19,7 @@ class ProjectDetailPage extends StatelessWidget {
       bloc: controller,
       listener: (context, state) {
         if (state.status == ProjectDetailStatus.failure) {
-          AsukaSnackbar.alert("Erro interno");
+          AsukaSnackbar.alert("Erro interno").show();
         }
       },
       builder: (context, state) {
@@ -41,20 +42,29 @@ class ProjectDetailPage extends StatelessWidget {
   }
 
   Widget _buildProjectDetail(BuildContext context, ProjectModel project) {
+    final totalTasks =
+        project.tasks.fold(0, (totalValue, task) => totalValue + task.duration);
+
     return CustomScrollView(
       slivers: [
-        ProjectDetailAppBar(),
+        ProjectDetailAppBar(
+          project: project,
+        ),
         SliverList(
           delegate: SliverChildListDelegate(
             [
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 50),
-                child: ProjectPieChart(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 50),
+                child: ProjectPieChart(
+                  projectEstimate: project.estimate,
+                  totalTasks: totalTasks,
+                ),
               ),
-              const ProjectTaskTile(),
-              const ProjectTaskTile(),
-              const ProjectTaskTile(),
-              const ProjectTaskTile(),
+              ...project.tasks
+                  .map((task) => ProjectTaskTile(
+                        task: task,
+                      ))
+                  .toList(),
             ],
           ),
         ),
@@ -64,10 +74,13 @@ class ProjectDetailPage extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: const EdgeInsets.all(15),
-                child: ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.check_circle_outline),
-                    label: const Text("Finalizar projeto")),
+                child: Visibility(
+                  visible: project.status != ProjectStatusEnum.finished,
+                  child: ElevatedButton.icon(
+                      onPressed: controller.finishProject,
+                      icon: const Icon(Icons.check_circle_outline),
+                      label: const Text("Finalizar projeto")),
+                ),
               ),
             ))
       ],

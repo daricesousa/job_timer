@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:job_timer/app/entities/projects_status_enum.dart';
 import 'package:job_timer/app/services/projects/project_service.dart';
 import 'package:job_timer/app/view_models/project_model.dart';
-
 part 'home_state.dart';
 
 class HomeController extends Cubit<HomeState> {

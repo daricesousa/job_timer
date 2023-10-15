@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:job_timer/app/entities/projects_status_enum.dart';
+import 'package:job_timer/app/modules/project/detail/controller/project_detail_controller.dart';
+import 'package:job_timer/app/view_models/project_model.dart';
 
 class ProjectDetailAppBar extends SliverAppBar {
-  ProjectDetailAppBar({super.key})
+  ProjectDetailAppBar({super.key, required ProjectModel project})
       : super(
           expandedHeight: 100,
           pinned: true,
           toolbarHeight: 100,
-          title: const Text("Projeto X"),
+          title: Text(project.name),
           centerTitle: true,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
@@ -29,11 +33,16 @@ class ProjectDetailAppBar extends SliverAppBar {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("10 tasks"),
-                          _NewTasks(),
+                          Text("${project.tasks.length} tasks"),
+                          Visibility(
+                            visible:
+                                project.status != ProjectStatusEnum.finished,
+                            replacement: const Text("Projeto finalizado"),
+                            child: _NewTasks(project: project),
+                          ),
                         ],
                       ),
                     ),
@@ -46,25 +55,32 @@ class ProjectDetailAppBar extends SliverAppBar {
 }
 
 class _NewTasks extends StatelessWidget {
-  const _NewTasks();
+  final ProjectModel project;
+  const _NewTasks({required this.project});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: CircleAvatar(
-            backgroundColor: Theme.of(context).primaryColor,
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 20,
+    return InkWell(
+      onTap: () async {
+        await Modular.to.pushNamed('/project/task/', arguments: project);
+        Modular.get<ProjectDetailController>().updateProject();
+      },
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
           ),
-        ),
-        const Text("Adicionar Task")
-      ],
+          const Text("Adicionar Task")
+        ],
+      ),
     );
   }
 }
