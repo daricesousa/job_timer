@@ -1,6 +1,6 @@
 # Job timer
 
-##Descrição
+## Descrição
 
 Este projeto foi desenvolvido com o propósito de estudar a aplicação dos seguintes conceitos e tecnologias:
 
@@ -12,7 +12,7 @@ s
 
 <b>Autenticação com Google</b>: A autenticação com o Google é implementada no projeto.
 
-##Capturas de tela
+## Capturas de tela
 
 <p align="center">
     <img src="./assets/screenshots/login.png" width="250" height="500"/>
