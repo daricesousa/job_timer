@@ -1,5 +1,7 @@
 # Job timer
 
+Projeto da academia do flutter desenvolvido no Dart Week. O aplicativo controla e gerencia as horas trabalhadas.
+
 ## Descrição
 
 Este projeto foi desenvolvido com o propósito de estudar a aplicação dos seguintes conceitos e tecnologias:
